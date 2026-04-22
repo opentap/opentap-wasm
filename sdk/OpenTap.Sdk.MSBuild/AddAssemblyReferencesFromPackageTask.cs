@@ -300,8 +300,9 @@ namespace Keysight.OpenTap.Sdk.MSBuild
                 Expander = new BuildVariableExpander(SourceFile);
                 string[] pathSeparators = { "\\", "/" };
                 var outDir = Expander.ExpandBuildVariables("$(OutDir)");
+                if (string.IsNullOrEmpty(outDir)) outDir = "";
                 // A separator should be appended if '$(OutDir)' does not end with a path separator already
-                ShouldAppendSeparator = pathSeparators.Contains(outDir.Last().ToString()) == false;
+                ShouldAppendSeparator = outDir.Length > 0 && pathSeparators.Contains(outDir.Last().ToString()) == false;
                 if (ShouldAppendSeparator)
                 {
                     // If it does not end with a path separator, use the last path separator in '$(OutDir)' as the separator.

@@ -14,6 +14,7 @@ namespace OpenTap
         public static readonly OperatingSystem Windows = new OperatingSystem(nameof(Windows));
         public static readonly OperatingSystem Linux = new OperatingSystem(nameof(Linux));
         public static readonly OperatingSystem MacOS = new OperatingSystem(nameof(MacOS));
+        public static readonly OperatingSystem Browser = new OperatingSystem(nameof(Browser));
         public static readonly OperatingSystem Unsupported = new OperatingSystem(nameof(Unsupported));
         public override string ToString() => Name;
         public string Name { get; }
@@ -25,6 +26,11 @@ namespace OpenTap
         private static TraceSource log = Log.CreateSource(nameof(OperatingSystem));
         static OperatingSystem getCurrent()
         {
+            if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Create("BROWSER")))
+            {
+                log.Debug("OS is browser (wasm)");
+                return OperatingSystem.Browser;
+            }
 
             if (Path.DirectorySeparatorChar == '\\')
             {
